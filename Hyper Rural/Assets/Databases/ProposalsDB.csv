@@ -1,31 +1,26 @@
-﻿ID,Name,Description,Economy,Environment,Infrastructure,General Happiness
-1,New Houses,,0,0,0,0
-2,Speed Bumps,,0,0,0,0
-3,Electric Car,,0,0,0,0
-4,Eco Friendly Lights,,0,0,0,0
-5,Town Garden,,0,0,0,0
-6,Hydroelectric Dam,,0,0,0,0
-7,Sea Wall,,0,0,0,0
-8,Artificial Beach,,0,0,0,0
-9,Temp 1,stat1 +,10,0,0,0
-10,Temp 2,Stat2 +,0,10,0,0
-11,Temp 3,stat2 +,0,0,10,0
-12,Temp 4,stat4 +,0,0,0,10
-13,Temp 5,Test Description,0,0,0,0
-14,Temp 6,,0,0,0,0
-15,Temp 7,,0,0,0,0
-16,Temp 8,,0,0,0,0
-17,Temp 9,,0,0,0,0
-18,Temp 10,,0,0,0,0
-19,Temp 11,,0,0,0,0
-20,Temp 12,,0,0,0,0
-21,Temp 13,,0,0,0,0
-22,Temp 14,,0,0,0,0
-23,Temp 15,,0,0,0,0
-24,Temp 16,,0,0,0,0
-25,Temp 17,,0,0,0,0
-26,Temp 18,,0,0,0,0
-27,Temp 19,,0,0,0,0
-28,Temp 20,,0,0,0,0
-29,Temp 21,,0,0,0,0
-30,Temp 22,,0,0,0,0
+﻿ID,Title,Description,Y_Economy,Y_Environment,Y_Appeal,Y_EcoDiversity,N_Economy,N_Environment,N_Appeal,N_EcoDiversity
+1,Impliment new bus route,,0,0,0,0,,,,
+2,Speed Bumps,,0,0,0,0,,,,
+3,Electric Car,,0,0,0,0,,,,
+4,Eco Friendly Lights,,0,0,0,0,,,,
+5,Town Garden,,0,0,0,0,,,,
+6,Hydroelectric Dam,,0,0,0,0,,,,
+7,Sea Wall,,0,0,0,0,,,,
+8,Artificial Beach,,0,0,0,0,,,,
+9,Build Offices,,,,,,,,,
+10,Temp 1,,10,0,0,0,,,,
+11,Temp 2,,0,10,0,0,,,,
+12,Temp 3,,0,0,10,0,,,,
+13,Temp 4,,0,0,0,10,,,,
+14,Temp 5,,0,0,0,0,,,,
+15,Temp 6,,0,0,0,0,,,,
+16,Temp 7,,0,0,0,0,,,,
+17,Temp 8,,0,0,0,0,,,,
+18,Temp 9,,0,0,0,0,,,,
+19,Temp 10,,0,0,0,0,,,,
+20,Temp 11,,0,0,0,0,,,,
+21,Temp 12,,0,0,0,0,,,,
+22,Temp 13,,0,0,0,0,,,,
+23,Temp 14,,0,0,0,0,,,,
+24,Temp 15,,0,0,0,0,,,,
+25,Temp 16,,0,0,0,0,,,,
