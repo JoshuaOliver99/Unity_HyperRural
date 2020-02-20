@@ -8,44 +8,50 @@ public class TestTable : MonoBehaviour
 {
     public TestStatusHandler TestStatusHandler;
 
-    public TextAsset file; // Locate the database
+    public TextAsset File; // Locate the database
 
     public Text Title; // For proposal title
     public Text Description; // For proposal description
+    public Text currNumber; // For current proposal number
 
-    // LIST TO HOLD PROPOSALS
+    // PROPOSALS
     List<Row> activeProposals; // Holds unseen proposals
     Row currentProposal; // Holds the current proposal
+
+    int seenProposals = 0; // Holds number of currently seen proposals
+    int maxProposals = 26; // How many proposals till game end
+    bool ended = false; // For ending the game
 
     private void Start()
     {
         // SETUP
-        Load(file); // Load the databse
+        Load(File); // Load the databse
         resetActiveProposals(); // Sets the active proposals
-
-        // GET FIRST PROPOSAL
-        currentProposal = getRandomProposal();
-
-        // APPLIES TEXT
-        //Title.text = Find_ID("1").Title; // Apply title
-        //Description.text = Find_ID("1").Description; // Apply Description
+        currentProposal = getRandomProposal(); // Gets the first proposal
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (!ended)
         {
-            acceptProposal();
+            if (Input.GetKeyDown(KeyCode.Y))
+                acceptProposal();
+
+            if (Input.GetKeyDown(KeyCode.N))
+                declineProposal();
         }
-        if (Input.GetKeyDown(KeyCode.N))
+        else
         {
-            declineProposal();
+            Debug.Log("GAME ENDED");
         }
+
     }
+
+
 
     private void acceptProposal() // APPLIES STATS + PULLS A NEW PROPOSAL
     {
-        TestStatusHandler.stat1 += int.Parse(currentProposal.Y_Stat1);
+        TestStatusHandler.stat1 += int.Parse(currentProposal.Y_Stat1); // Apply stats
         TestStatusHandler.stat2 += int.Parse(currentProposal.Y_Stat2);
         TestStatusHandler.stat3 += int.Parse(currentProposal.Y_Stat3);
         TestStatusHandler.stat4 += int.Parse(currentProposal.Y_Stat4);
@@ -55,7 +61,7 @@ public class TestTable : MonoBehaviour
 
     private void declineProposal() // APPLIES STATS + PULLS A NEW PROPOSAL
     {
-        TestStatusHandler.stat1 += int.Parse(currentProposal.N_Stat1);
+        TestStatusHandler.stat1 += int.Parse(currentProposal.N_Stat1); // Apply stats
         TestStatusHandler.stat2 += int.Parse(currentProposal.N_Stat2);
         TestStatusHandler.stat3 += int.Parse(currentProposal.N_Stat3);
         TestStatusHandler.stat4 += int.Parse(currentProposal.N_Stat4);
@@ -63,25 +69,44 @@ public class TestTable : MonoBehaviour
         currentProposal = getRandomProposal(); // Pulls a new proposal
     }
 
+    private Row getRandomProposal() // PULLS A RANDOM PROPOSAL or ENDS GAME
+    {
+        if (activeProposals.Count != 0 && seenProposals < maxProposals) // GAME STILL IN PLAY
+        {
+            seenProposals++; // Increase seen counter
+
+            Row foundProposal = activeProposals[Random.Range(0, activeProposals.Count)]; // Chooses random from list of active
+            drawUI(foundProposal); // Draws UI for the found proposal
+
+            activeProposals.Remove(foundProposal); // Removes the current proposal from active list
+
+            return foundProposal;
+        }
+        else if (seenProposals >= maxProposals) // PLAYED FOR MAX TURNS
+        {
+            Debug.Log("seenProposals > maxProposals --- GAME END");
+            ended = true; // End Game
+            return null;
+        }
+
+        Debug.LogError("No remaining proposals");
+        return currentProposal;
+    }
+
+    private void drawUI(Row proposal)
+    {
+        Title.text = proposal.Title; // Apply title
+        Description.text = proposal.Description; // Apply Description
+        currNumber.text = seenProposals.ToString(); // Display current proposal number
+    }
+
     private void resetActiveProposals()
     {
         activeProposals = new List<Row>(GetRowList()); // Sets activeProposals to rowList
     }
 
-    private Row getRandomProposal()
-    {
-        Row foundProposal = activeProposals[Random.Range(0, activeProposals.Count)]; // Chooses random random from the active 
-        //Debug.Log("ID: " + foundProposal.ID + " Description: " + foundProposal.Description); // the current proposal
-        //Debug.Log("Active proposal count: " + activeProposals.Count); // the total (before removing current)
-        activeProposals.Remove(foundProposal); // Removes the current proposal
 
-        Title.text = currentProposal.Title; // Apply title
-        Description.text = currentProposal.Description; // Apply Description
 
-        return foundProposal;
-    }
-
-    
     public class Row
     {
         public string ID;
@@ -97,7 +122,6 @@ public class TestTable : MonoBehaviour
         public string N_Stat3;
         public string N_Stat4;
         public string N_Stat5;
-
     }
 
     List<Row> rowList = new List<Row>();
