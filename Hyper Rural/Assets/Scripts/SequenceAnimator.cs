@@ -7,7 +7,7 @@ public class SequenceAnimator : MonoBehaviour
     List<Animator> _animators;
     public float WaitBetween = 0.08f;
     public float WaitEnd = 3f;
-    void Start()
+    void OnEnable()
     {
         _animators = new List<Animator>(GetComponentsInChildren<Animator>());
 
