@@ -83,25 +83,22 @@ public class GameController : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    Debug.Log("1 pressed");
-                    // accept #1
-                    // endCompetition(); // Resets for next Competition
+                    competitionTable.AcceptCompetition(1);
+                    endCompetition();
                 }
                 else if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
-                    Debug.Log("2 pressed");
-                    // accept #2
-                    // endCompetition(); // Resets for next Competition
+                    competitionTable.AcceptCompetition(2);
+                    endCompetition();
                 }
                 else if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
-                    Debug.Log("3 pressed");
-                    // accept #3
-                    // endCompetition(); // Resets for next Competition
+                    competitionTable.AcceptCompetition(3);
+                    endCompetition();
                 }
                 else if (Input.GetKeyDown(KeyCode.P))
                 {
-                    // Decline all
+                    competitionTable.GetRandomCompetitions(); // Changes active challenges 
                     endCompetition(); // Resets for next Competition
                 }
             }

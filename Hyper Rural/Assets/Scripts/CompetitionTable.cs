@@ -26,50 +26,75 @@ public class CompetitionTable : MonoBehaviour
 	private void Start()
 	{
 		Load(competitionDB);
-		resetActiveCompetitons(); // Sets the active proposals
-		currentCompetiton1 = getRandomCompetition(); // Gets the first proposal
-		currentCompetiton2 = getRandomCompetition(); // Gets the first proposal
-		currentCompetiton3 = getRandomCompetition(); // Gets the first proposal
-	}
+		resetActiveCompetitons(); // Sets the active challenges
+        GetRandomCompetitions(); // Assigns three random challenges
+        drawUI(); // Draws UI for the challenege proposals
+    }
 
-	public void AcceptCompetition1() // Applies stats, Pulls new competition
+    public void GetRandomCompetitions()
+    {
+        currentCompetiton1 = getRandomCompetition();
+        currentCompetiton2 = getRandomCompetition();
+        currentCompetiton3 = getRandomCompetition();
+    }
+
+    public void AcceptCompetition(int i)
+    {
+        switch (i)
+        {
+            case 1:
+                AcceptCompetition1();
+                break;
+            case 2:
+                AcceptCompetition2();
+                break;
+            case 3:
+                AcceptCompetition3();
+                break;
+            default:
+                Debug.LogError("Competition case out of bounds.");
+                break;
+        }
+
+        GetRandomCompetitions();
+        drawUI(); // Draws UI for the challenege proposals
+    }
+
+	private void AcceptCompetition1() // Applies stats
 	{
 		GameController.econemy += int.Parse(currentCompetiton1.Y_Economy); // Apply stats
 		GameController.environment += int.Parse(currentCompetiton1.Y_Environment);
 		GameController.appeal += int.Parse(currentCompetiton1.Y_Appeal);
 		GameController.ecoDiversity += int.Parse(currentCompetiton1.Y_EcoDiversity);
-		currentCompetiton1 = getRandomCompetition(); // Pulls a new proposal
 	}
 
-	public void AcceptCompetition2() // Applies stats, Pulls new competition
+    private void AcceptCompetition2() // Applies stats
 	{
 		GameController.econemy += int.Parse(currentCompetiton2.Y_Economy); // Apply stats
 		GameController.environment += int.Parse(currentCompetiton2.Y_Environment);
 		GameController.appeal += int.Parse(currentCompetiton2.Y_Appeal);
 		GameController.ecoDiversity += int.Parse(currentCompetiton2.Y_EcoDiversity);
-		currentCompetiton2 = getRandomCompetition(); // Pulls a new proposal
 	}
 
-	public void AcceptCompetition3() // Applies stats, Pulls new competition
+    private void AcceptCompetition3() // Applies stats
 	{
 		GameController.econemy += int.Parse(currentCompetiton3.Y_Economy); // Apply stats
 		GameController.environment += int.Parse(currentCompetiton3.Y_Environment);
 		GameController.appeal += int.Parse(currentCompetiton3.Y_Appeal);
 		GameController.ecoDiversity += int.Parse(currentCompetiton3.Y_EcoDiversity);
-		currentCompetiton3 = getRandomCompetition(); // Pulls a new proposal
 	}
 
 
 	private Row getRandomCompetition() // PULLS A RANDOM PROPOSAL or ENDS GAME
 	{
-		if (activeCompetitions.Count > 3) // Enough active competitons remain
+		if (activeCompetitions.Count > 3) // If (Enough active competitons remain)
 		{
 			Row foundProposal = activeCompetitions[Random.Range(0, activeCompetitions.Count)]; // Chooses random from list of active
-			drawUI(foundProposal); // Draws UI for the found proposal
+			activeCompetitions.Remove(foundProposal); // Removes the current challenege from active list
 
-			activeCompetitions.Remove(foundProposal); // Removes the current proposal from active list
+            
 
-			return foundProposal;
+            return foundProposal;
 		}
 		else
 		{
@@ -79,7 +104,7 @@ public class CompetitionTable : MonoBehaviour
 
 	}
 
-	private void drawUI(Row proposal)
+	private void drawUI()
 	{
 		title1.text = currentCompetiton1.Title; // Apply Competiton1 title
 		description1.text = currentCompetiton1.Description; // Apply Competiton1 Description

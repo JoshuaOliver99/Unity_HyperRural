@@ -666,6 +666,16 @@ PrefabInstance:
       propertyPath: timerText
       value: 
       objectReference: {fileID: 1028870019}
+    - target: {fileID: 2781327312674317524, guid: 90761e15d52349542b78238631335735,
+        type: 3}
+      propertyPath: waitTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2781327312674317524, guid: 90761e15d52349542b78238631335735,
+        type: 3}
+      propertyPath: competionFreq
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2781327312674317525, guid: 90761e15d52349542b78238631335735,
         type: 3}
       propertyPath: title1
