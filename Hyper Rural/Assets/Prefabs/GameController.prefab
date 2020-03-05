@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2781327312674317527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2781327312674317531}
+  - component: {fileID: 2781327312674317524}
+  - component: {fileID: 2781327312674317525}
+  - component: {fileID: 2781327312674317526}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2781327312674317531
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2781327312674317527}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2781327312674317524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2781327312674317527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea8e2323fc88e45469fb2d06290d83dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proposalsTable: {fileID: 2781327312674317526}
+  competitionTable: {fileID: 2781327312674317525}
+  proposalPanel: {fileID: 0}
+  CompetitionPanel: {fileID: 0}
+  statusText: {fileID: 0}
+  turnText: {fileID: 0}
+  timerText: {fileID: 0}
+  timerAverage: 0
+  timerRange: 0
+--- !u!114 &2781327312674317525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2781327312674317527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a182a0e797bc64a852a3cff0d6aa78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  competitionDB: {fileID: 4900000, guid: 78f7a8694e1d83440b32b70b710b2406, type: 3}
+  title1: {fileID: 0}
+  description1: {fileID: 0}
+  title2: {fileID: 0}
+  description2: {fileID: 0}
+  title3: {fileID: 0}
+  description3: {fileID: 0}
+--- !u!114 &2781327312674317526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2781327312674317527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b6e832ee2e823d43b83646b0c974992, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proposalDB: {fileID: 4900000, guid: 541237c63e0999d4eb91df83eff987b2, type: 3}
+  title: {fileID: 0}
+  description: {fileID: 0}
