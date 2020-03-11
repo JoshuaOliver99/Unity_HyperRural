@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class GameController : MonoBehaviour
 {
     // SETUP LINKS
-    public ProposalsTable proposalsTable; // Linking tables
-    public CompetitionTable competitionTable; // linking tables
+    public ProposalsTable proposalsTable; // Linking tables (DB data)
+    public CompetitionTable competitionTable; // linking tables (DB data)
     public GameObject proposalPanel; // For hiding panel
     public GameObject CompetitionPanel; // For hiding panel
-    // SETUP LINKS ----- DEBUG
-    public Text statusText; // For displaying stats
-    public Text turnText; // For current proposal number
-    public Text timerText; // For current proposal number
+    public GameObject EndPanel; // For hiding panel
 
+    // SETUP LINKS
+    public Text endDescText; // For displaying turns spent
+    public Text endStatsText; // For displaying end game stats
+    // ----- DEBUG
+    public Text statusText; // For displaying stats
+    public Text turnText; // For displaying current proposal number
+    public Text timerText; // For displaying current proposal number
 
     // STATS
     public static int econemy, environment, appeal, ecoDiversity = 0;
@@ -36,6 +42,7 @@ public class GameController : MonoBehaviour
     {
         proposalPanel.SetActive(false);
         CompetitionPanel.SetActive(false);
+        EndPanel.SetActive(false);
     }
 
     void Update()
@@ -58,6 +65,7 @@ public class GameController : MonoBehaviour
             else if (turnNumber >= maxTurns) // if (turns exceed max ammount)
             {
                 inPlay = false;
+                EndPanel.SetActive(true); // Show EndPanel (done here to allow hiding and showing)
             }
 
 
@@ -107,8 +115,25 @@ public class GameController : MonoBehaviour
         }
         else if (!inPlay)
         {
-            Debug.Log("Max turns reached - Turn: " + turnNumber + " / " + maxTurns);
-            Debug.Log("GAME ENDED.");
+            //EndPanel.SetActive(true); // Show EndPanel
+            endDescText.text = ("You lasted for " + turnNumber + " turns!");
+            endStatsText.text = 
+                ("Economy: " + econemy + '\n' + '\n' +
+                "Environment: " + environment + '\n' + '\n' +
+                "Appeal: " + appeal + '\n' + '\n' +
+                "Eco-DIversity: " + ecoDiversity);
+
+            if (Input.GetKeyDown(KeyCode.Return)) // Return to main menu
+            {
+                SceneManager.LoadScene("Menu"); // Load Main menu scene
+            }
+            if (Input.GetKeyDown(KeyCode.P)) // hide/show end panel
+            {
+                if (EndPanel.activeSelf == true)
+                    EndPanel.SetActive(false); // hide EndPanel
+                else
+                    EndPanel.SetActive(true); // show EndPanel
+            }
         }
 
         mainDebug(); // Test debug items (remove on build)
@@ -137,10 +162,10 @@ public class GameController : MonoBehaviour
 
     private void mainDebug() // DEBUG / TESTING (disable on build)
     {
-        statusText.text = ("Economy: " + econemy + "   Environment: " + environment + "   Appeal: " + appeal +
-                "   Eco-DIversity: " + ecoDiversity);
+        statusText.text = ("Economy: " + econemy + "   Environment: " + environment + 
+            "   Appeal: " + appeal + "   Eco-DIversity: " + ecoDiversity);
 
-        turnText.text = ("Turn number: " + turnNumber);
+        turnText.text = ("Turn number: " + turnNumber + " / " + maxTurns);
 
         timerText.text = ("Timer: " + timer + " / " + waitTime);
     }
