@@ -7,11 +7,15 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame ()
     {
-        SceneManager.LoadScene("Office"); 
+        SceneManager.LoadScene("Office");
        
     }
 
-   
+    private void Start()
+    {
+        
+    }
+
 
     public void QuitGame ()
     {
@@ -24,6 +28,9 @@ public class MainMenu : MonoBehaviour
         {
             Application.Quit();
         }
+
+       
+
     }
 
 }
