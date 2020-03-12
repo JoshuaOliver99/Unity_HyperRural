@@ -38,8 +38,17 @@ public class GameController : MonoBehaviour
     public static bool isCompetition; // If is competition
 
 
-    void Start()
+    void OnEnable()
     {
+        // Stats used in resetting
+        turnNumber = 0;
+        econemy = 0;
+        environment = 0;
+        appeal = 0;
+        ecoDiversity = 0;
+        timer = 0;
+        inPlay = true;
+
         proposalPanel.SetActive(false);
         CompetitionPanel.SetActive(false);
         EndPanel.SetActive(false);
