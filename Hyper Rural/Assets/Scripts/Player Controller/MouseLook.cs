@@ -16,7 +16,7 @@ public class MouseLook : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        
+        pauseUI.SetActive(false);
         
     }
 
@@ -41,7 +41,7 @@ public class MouseLook : MonoBehaviour
 
     void DetectUIandHandleCursor()
     {
-        if (pauseUI.activeSelf)
+        if (pauseUI.activeInHierarchy)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
