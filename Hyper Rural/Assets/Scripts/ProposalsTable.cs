@@ -7,10 +7,12 @@ public class ProposalsTable : MonoBehaviour
 {
     // SETUP
     public TextAsset proposalDB; // Link DB
+    Sprite sprite; // For holding the sprite of the image
 
     // TEXT
     public Text title; // For proposal title
     public Text description; // For proposal description
+    public Image depiction; // For depiction of proposal#]
 
     // PROPOSALS
     List<Row> activeProposals; // Holds unseen proposals
@@ -46,15 +48,14 @@ public class ProposalsTable : MonoBehaviour
         if (activeProposals.Count != 0) // Active proposals remain
         {
             Row foundProposal = activeProposals[Random.Range(0, activeProposals.Count)]; // Chooses random from list of active
-            drawUI(foundProposal); // Draws UI for the found proposal
-
             activeProposals.Remove(foundProposal); // Removes the current proposal from active list
 
+            drawUI(foundProposal); // Draws UI for the found proposal
             return foundProposal;
         }
         else
         {
-            Debug.LogError("Active / Remaining proposals: " + activeProposals.Count);
+            Debug.LogError("Active proposals: " + activeProposals.Count);
             return null;
         }
 
@@ -64,6 +65,10 @@ public class ProposalsTable : MonoBehaviour
     {
         title.text = proposal.Title; // Apply title
         description.text = proposal.Description; // Apply Description
+
+        sprite = Resources.Load<Sprite>("Sprites/Proposals/Proposal" + proposal.ID); // Load the depiction
+        if (sprite != null)
+            depiction.sprite = sprite; // Apply the depiction
     }
 
     private void resetActiveProposals()
