@@ -1,0 +1,7 @@
+Yoon ChangSik. (2015) CSV2Table.
+[Online] [Accesses on 6th February 2020]
+https://assetstore.unity.com/packages/tools/utilities/csv2table-36443
+
+David Sherlock. (2015) Working with CVS in Unity.
+[Online] [Accesses on 6th February 2020]
+https://www.youtube.com/watch?v=Dal755spxAE

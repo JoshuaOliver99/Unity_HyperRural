@@ -62,7 +62,7 @@ public class CompetitionTable : MonoBehaviour
 
 	private void AcceptCompetition1() // Applies stats
 	{
-		GameController.econemy += int.Parse(currentCompetiton1.Y_Economy); // Apply stats
+		GameController.economy += int.Parse(currentCompetiton1.Y_Economy); // Apply stats
 		GameController.environment += int.Parse(currentCompetiton1.Y_Environment);
 		GameController.appeal += int.Parse(currentCompetiton1.Y_Appeal);
 		GameController.ecoDiversity += int.Parse(currentCompetiton1.Y_EcoDiversity);
@@ -70,7 +70,7 @@ public class CompetitionTable : MonoBehaviour
 
     private void AcceptCompetition2() // Applies stats
 	{
-		GameController.econemy += int.Parse(currentCompetiton2.Y_Economy); // Apply stats
+		GameController.economy += int.Parse(currentCompetiton2.Y_Economy); // Apply stats
 		GameController.environment += int.Parse(currentCompetiton2.Y_Environment);
 		GameController.appeal += int.Parse(currentCompetiton2.Y_Appeal);
 		GameController.ecoDiversity += int.Parse(currentCompetiton2.Y_EcoDiversity);
@@ -78,7 +78,7 @@ public class CompetitionTable : MonoBehaviour
 
     private void AcceptCompetition3() // Applies stats
 	{
-		GameController.econemy += int.Parse(currentCompetiton3.Y_Economy); // Apply stats
+		GameController.economy += int.Parse(currentCompetiton3.Y_Economy); // Apply stats
 		GameController.environment += int.Parse(currentCompetiton3.Y_Environment);
 		GameController.appeal += int.Parse(currentCompetiton3.Y_Appeal);
 		GameController.ecoDiversity += int.Parse(currentCompetiton3.Y_EcoDiversity);

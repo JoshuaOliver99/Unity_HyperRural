@@ -7,10 +7,12 @@ public class ProposalsTable : MonoBehaviour
 {
     // SETUP
     public TextAsset proposalDB; // Link DB
+    Sprite sprite; // For holding the sprite of the image
 
     // TEXT
     public Text title; // For proposal title
     public Text description; // For proposal description
+    public Image depiction; // For depiction of proposal#]
 
     // PROPOSALS
     List<Row> activeProposals; // Holds unseen proposals
@@ -25,7 +27,7 @@ public class ProposalsTable : MonoBehaviour
 
     public void AcceptProposal() // APPLIES ACCEPT STATS then PULLS A NEW PROPOSAL
     {
-        GameController.econemy += int.Parse(currentProposal.Y_Economy); // Apply stats
+        GameController.economy += int.Parse(currentProposal.Y_Economy); // Apply stats
         GameController.environment += int.Parse(currentProposal.Y_Environment);
         GameController.appeal += int.Parse(currentProposal.Y_Appeal);
         GameController.ecoDiversity += int.Parse(currentProposal.Y_EcoDiversity);
@@ -34,7 +36,7 @@ public class ProposalsTable : MonoBehaviour
 
     public void DeclineProposal() // APPLIES DECLINE STATS then PULLS A NEW PROPOSAL
     {
-        GameController.econemy += int.Parse(currentProposal.N_Economy); // Apply stats
+        GameController.economy += int.Parse(currentProposal.N_Economy); // Apply stats
         GameController.environment += int.Parse(currentProposal.N_Environment);
         GameController.appeal += int.Parse(currentProposal.N_Appeal);
         GameController.ecoDiversity += int.Parse(currentProposal.N_EcoDiversity);
@@ -43,18 +45,17 @@ public class ProposalsTable : MonoBehaviour
 
     private Row getRandomProposal() // PULLS A RANDOM PROPOSAL or ENDS GAME
     {
-        if (activeProposals.Count != 0) // Active proposals remain
+        if (activeProposals.Count >= 0) // Active proposals remain
         {
             Row foundProposal = activeProposals[Random.Range(0, activeProposals.Count)]; // Chooses random from list of active
-            drawUI(foundProposal); // Draws UI for the found proposal
-
             activeProposals.Remove(foundProposal); // Removes the current proposal from active list
 
+            drawUI(foundProposal); // Draws UI for the found proposal
             return foundProposal;
         }
         else
         {
-            Debug.LogError("Active / Remaining proposals: " + activeProposals.Count);
+            Debug.LogError("Active proposals: " + activeProposals.Count);
             return null;
         }
 
@@ -64,6 +65,12 @@ public class ProposalsTable : MonoBehaviour
     {
         title.text = proposal.Title; // Apply title
         description.text = proposal.Description; // Apply Description
+
+        sprite = Resources.Load<Sprite>("Sprites/Proposals/Proposal" + proposal.ID); // Load the depiction
+        if (sprite != null)
+            depiction.sprite = sprite; // Apply the depiction
+        else
+            depiction.sprite = null;
     }
 
     private void resetActiveProposals()
