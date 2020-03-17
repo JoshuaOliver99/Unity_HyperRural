@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour
     void OnEnable()
     {
         // Set stats to starting values
-        economy = 0; environment = 0; appeal = 0; ecoDiversity = 0;
+        economy = 5; environment = 5; appeal = 5; ecoDiversity = 5;
         turnNumber = 0;
         acceptedTotal = 0; deniedTotal = 0;
         timer = 0;
@@ -89,8 +89,7 @@ public class GameController : MonoBehaviour
     {
         if (timer < waitTime)
             timer += Time.deltaTime; // Increase timer
-
-        if (timer >= waitTime && turnNumber < maxTurns && !inGameEvent)
+        else if (timer >= waitTime && turnNumber < maxTurns && !inGameEvent)
         {
             if (!notificationPanel.activeSelf)
                 notificationPanel.SetActive(true);
@@ -106,7 +105,7 @@ public class GameController : MonoBehaviour
                 notificationPanel.SetActive(false);
             }
         }
-        else if (turnNumber >= maxTurns) // if (turns exceed max ammount)
+        else if (turnNumber >= maxTurns || economy <= 0 || environment <= 0 || appeal <= 0 || ecoDiversity <= 0) // if (turns exceed max ammount) or (player looses)
         {
             inPlay = false;
             EndPanel.SetActive(true); // Show EndPanel (done here to allow hiding and showing)
@@ -185,7 +184,7 @@ public class GameController : MonoBehaviour
                 "You made a total of " + turnNumber + " decisions." + "\n" +
                 acceptedTotal + " proposals were accepted and " + deniedTotal + " proposals were denied."); // Display a brief description
 
-        endStatsText.text = ("While in office." + "\n\n" +
+        endStatsText.text = ("While in office:" + "\n\n" +
             "The Economy" + StatsRep(economy) + "\n\n" +
             "The Environment" + StatsRep(environment) + "\n\n" +
             "The Appeal" + StatsRep(appeal) + "\n\n" +
@@ -209,10 +208,11 @@ public class GameController : MonoBehaviour
     }
     private string StatsRep(int stat) // Returns a string comment on how the stat was altered
     {
+        stat -= 5;
         if (stat == 0)
             return " was unaltered.";
         else if (stat > 0 && stat <= 5)
-            return " grew by " + stat + ". \nGood effort";
+            return " grew by " + stat + ". \nGood effort.";
         else if (stat > 5 && stat <= 10)
             return " grew by " + stat + ". \nWell done.";
         else if (stat > 10 && stat <= 15)
@@ -222,7 +222,7 @@ public class GameController : MonoBehaviour
         else if (stat > 20)
             return " grew by " + stat + ". \nIMPOSSIBLE!";
         else if (stat < 0 && stat >= -5)
-            return " shrunk by " + stat + ". \npoor effort!.";
+            return " shrunk by " + stat + ". \nPoor effort!";
         else if (stat < 5 && stat >= -10)
             return " shrunk by " + stat + ". \nShameful attempt!";
         else if (stat < 10)
