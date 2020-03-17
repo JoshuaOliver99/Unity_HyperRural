@@ -105,7 +105,8 @@ public class GameController : MonoBehaviour
                 notificationPanel.SetActive(false);
             }
         }
-        else if (turnNumber >= maxTurns || economy <= 0 || environment <= 0 || appeal <= 0 || ecoDiversity <= 0) // if (turns exceed max ammount) or (player looses)
+
+        if (turnNumber >= maxTurns || economy <= 0 || environment <= 0 || appeal <= 0 || ecoDiversity <= 0) // if (turns exceed max ammount) or (player looses)
         {
             inPlay = false;
             EndPanel.SetActive(true); // Show EndPanel (done here to allow hiding and showing)
