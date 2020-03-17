@@ -41,7 +41,10 @@ public class GameController : MonoBehaviour
     void OnEnable()
     {
         // Set stats to starting values
-        economy = 0; environment = 0; appeal = 0; ecoDiversity = 0;
+        economy = 5; environment = 5; appeal = 5; ecoDiversity = 5;
+        ChartValues.ecoChartMax = 15; ChartValues.envirChartMax = 15; ChartValues.appChartMax = 15; ChartValues.ecoDChartMax = 15;
+
+
         turnNumber = 0;
         acceptedTotal = 0; deniedTotal = 0;
         timer = 0;
@@ -54,6 +57,7 @@ public class GameController : MonoBehaviour
         CompetitionPanel.SetActive(false);
         EndPanel.SetActive(false);
         notificationPanel.SetActive(false);
+        
     }
 
     void Update()
@@ -68,6 +72,7 @@ public class GameController : MonoBehaviour
             {
                 if (isProposal)
                 {
+
                     ProposalManger(); // Handles Proposals
                 }
                 else if (isCompetition)
@@ -113,6 +118,7 @@ public class GameController : MonoBehaviour
         }
     }
     #endregion
+
 
     #region GameEvents
     private void ProposalManger() // Manages the current proposal 
