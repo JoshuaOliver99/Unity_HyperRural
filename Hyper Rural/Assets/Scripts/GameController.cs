@@ -5,56 +5,51 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    // SETUP LINKS
-    public ProposalsTable proposalsTable; // Linking tables (DB data)
-    public CompetitionTable competitionTable; // linking tables (DB data)
-    public GameObject proposalPanel; // For hiding panel
-    public GameObject CompetitionPanel; // For hiding panel
-    public GameObject EndPanel; // For hiding panel
-    public GameObject notificationPanel; // For displayling the notification alert 
+    [Header("References")]
+    [SerializeField] ProposalsTable proposalsTable; // Linking tables (DB data)
+    [SerializeField] CompetitionTable competitionTable; // linking tables (DB data)
+    [SerializeField] GameObject proposalPanel; // For hiding panel
+    [SerializeField] GameObject CompetitionPanel; // For hiding panel
+    [SerializeField] GameObject notificationPanel; // For displayling the notification alert 
+    [SerializeField] GameObject EndPanel; // For hiding panel
 
-    // SETUP LINKS
-    public Text endDescText; // For displaying turns spent
-    public Text endStatsText; // For displaying end game stats
-    // ----- DEBUG
-    public Text statusText; // For displaying stats
-    public Text turnText; // For displaying current proposal number
-    public Text timerText; // For displaying current proposal number
+    [SerializeField] Text endDescText; // For displaying turns spent
+    [SerializeField] Text endStatsText; // For displaying end game stats
 
-    // STATS
-    public static int economy, environment, appeal, ecoDiversity = 0;
+    [Header("Debug references")]
+    [SerializeField] Text statusText; // For displaying stats
+    [SerializeField] Text turnText; // For displaying current proposal number
+    [SerializeField] Text timerText; // For displaying current proposal number
 
-    // GAME VAIRABLES
-    private int turnNumber; // Turn number
-    [SerializeField] int maxTurns = 26; // How many turns till game end
-    private int acceptedTotal;
-    private int deniedTotal;
-
-    private float timer; // Game clock for proposals
+    [Header("Game Vairables")]
     [SerializeField] int waitTime = 5; // Time till next proposal
     [SerializeField] int competionFreq = 8; // How frequent competitons are
+    [SerializeField] int maxTurns = 26; // How many turns till game end
 
-    private bool inPlay = true; // if is in play
-    private bool inGameEvent;
-    private bool isProposal; // If is proposal
-    private bool isCompetition; // If is competition
+    public static int economy, environment, appeal, ecoDiversity = 0; // The game stats 
+
+    private int turnNumber; // Current turn number
+    private int acceptedTotal, deniedTotal; // Total of Accepted / Denied proposals
+    private float timer; // Game clock for causing events
+
+    private bool inPlay = true; // if game in play
+    private bool inGameEvent;  // If in a game event 
+    private bool isProposal; // If currently is proposal
+    private bool isCompetition; // If currently is competition
 
 
     void OnEnable()
     {
-        // Set the stats on load
+        // Set stats to starting values
+        economy = 0; environment = 0; appeal = 0; ecoDiversity = 0;
         turnNumber = 0;
-        economy = 0;
-        environment = 0;
-        appeal = 0;
-        ecoDiversity = 0;
+        acceptedTotal = 0; deniedTotal = 0;
         timer = 0;
         inPlay = true;
         inGameEvent = false;
         isProposal = false;
         isCompetition = false;
-
-        // Hide panels
+        // Hide all panels
         proposalPanel.SetActive(false);
         CompetitionPanel.SetActive(false);
         EndPanel.SetActive(false);
@@ -65,87 +60,154 @@ public class GameController : MonoBehaviour
     {
         if (inPlay)
         {
-            stateManager(); // Triggers the different game states
-
-
-            if (isProposal)
+            if (!inGameEvent)
             {
-                proposalPanel.SetActive(true); // Display proposalPanel
-
-                if (Input.GetKeyDown(KeyCode.Y)) // Accept / Yes
-                {
-                    proposalsTable.AcceptProposal(); // Accepts, Applies stats, Loads next
-                    endProposal(); // Resets for next proposal
-                    acceptedTotal++;
-                }
-                if (Input.GetKeyDown(KeyCode.N)) // Decline / No
-                {
-                    proposalsTable.DeclineProposal(); // Declines, Applies stats, Loads next
-                    endProposal(); // Resets for next proposal
-                    deniedTotal++;
-                }
-
+                EventManager(); // Triggers the different game states / Events
             }
-            else if (isCompetition)
+            else if (inGameEvent)
             {
-                CompetitionPanel.SetActive(true); // Display competitionPanel
-
-                if (Input.GetKeyDown(KeyCode.Alpha1))
+                if (isProposal)
                 {
-                    competitionTable.AcceptCompetition(1);
-                    endCompetition();
+                    ProposalManger(); // Handles Proposals
                 }
-                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                else if (isCompetition)
                 {
-                    competitionTable.AcceptCompetition(2);
-                    endCompetition();
-                }
-                else if (Input.GetKeyDown(KeyCode.Alpha3))
-                {
-                    competitionTable.AcceptCompetition(3);
-                    endCompetition();
-                }
-                else if (Input.GetKeyDown(KeyCode.P)) // Pass
-                {
-                    competitionTable.GetRandomCompetitions(); // Changes active challenges 
-                    endCompetition(); // Resets for next Competition
+                    CompetitionManager(); // Handles Competitons
                 }
             }
-
-
         }
-        else if (!inPlay) // Game ended
+        else if (!inPlay)
         {
-            endDescText.text = ("Your time in office is over." + "\n" +
+            EndGameManager();
+        }
+
+        MainDebug(); // For debugging - remove on build
+    }
+
+    #region EventManager
+    private void EventManager() // Manages causing the differnent game states
+    {
+        if (timer < waitTime)
+            timer += Time.deltaTime; // Increase timer
+
+        if (timer >= waitTime && turnNumber < maxTurns && !inGameEvent)
+        {
+            if (!notificationPanel.activeSelf)
+                notificationPanel.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (turnNumber % competionFreq == 0 && turnNumber != 0) // if (competiton turn && not turn 0)
+                    isCompetition = true; // Cause a competition
+                else
+                    isProposal = true; // Cause a proposal
+
+                inGameEvent = true;
+                notificationPanel.SetActive(false);
+            }
+        }
+        else if (turnNumber >= maxTurns) // if (turns exceed max ammount)
+        {
+            inPlay = false;
+            EndPanel.SetActive(true); // Show EndPanel (done here to allow hiding and showing)
+        }
+    }
+    #endregion
+
+    #region GameEvents
+    private void ProposalManger() // Manages the current proposal 
+    {
+        proposalPanel.SetActive(true); // Display proposalPanel
+
+        if (Input.GetKeyDown(KeyCode.Y)) // Accept / Yes
+        {
+            proposalsTable.AcceptProposal(); // Changes the active && Writes UI && Applies stats
+            EndProposal(); // Resets for next proposal
+            acceptedTotal++;
+        }
+        if (Input.GetKeyDown(KeyCode.N)) // Decline / No
+        {
+            proposalsTable.DeclineProposal(); 
+            EndProposal(); // Resets for next proposal
+            deniedTotal++;
+        }
+    }
+    private void CompetitionManager() // Manages the current competition
+    {
+        CompetitionPanel.SetActive(true); // Display competitionPanel
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            competitionTable.AcceptCompetition(1); // Changes the active && Writes UI && Applies stats
+            EndCompetition();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            competitionTable.AcceptCompetition(2);
+            EndCompetition();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            competitionTable.AcceptCompetition(3);
+            EndCompetition();
+        }
+        else if (Input.GetKeyDown(KeyCode.P)) // Pass
+        {
+            competitionTable.GetRandomCompetitions(); // Changes active challenges 
+            EndCompetition(); // Resets for next Competition
+        }
+    }
+
+    private void EndProposal() // Called when the player interacts with a proposal
+    {
+        isProposal = false; // Exit isProposal if statment
+        proposalPanel.SetActive(false); // Hide proposalPanel
+        EndTurn();
+    }
+    private void EndCompetition() // Called when the player interacts with a proposal
+    {
+        isCompetition = false; // Exit isCompetition if statment
+        CompetitionPanel.SetActive(false); // Hide competitionPanel
+        EndTurn();
+    }
+    private void EndTurn() // Manages stats upon ending a turn
+    {
+        turnNumber++; // Increse turn number
+        timer = 0; // Reset timer
+        inGameEvent = false;
+    }
+    #endregion
+
+    #region EndGame
+    private void EndGameManager()
+    {
+        endDescText.text = ("Your time in office is over." + "\n" +
                 "You made a total of " + turnNumber + " decisions." + "\n" +
                 acceptedTotal + " proposals were accepted and " + deniedTotal + " proposals were denied."); // Display a brief description
 
-            endStatsText.text = ("While in office." + "\n\n" +
-                "The Economy" + StatsRep(economy) + "\n\n" +
-                "The Environment" + StatsRep(environment) + "\n\n" +
-                "The Appeal" + StatsRep(appeal) + "\n\n" +
-                "The Eco-Diversity" + StatsRep(ecoDiversity)); // Display the end stats
+        endStatsText.text = ("While in office." + "\n\n" +
+            "The Economy" + StatsRep(economy) + "\n\n" +
+            "The Environment" + StatsRep(environment) + "\n\n" +
+            "The Appeal" + StatsRep(appeal) + "\n\n" +
+            "The Eco-Diversity" + StatsRep(ecoDiversity)); // Display the end stats
 
-            if (Input.GetKeyDown(KeyCode.Return)) // Return to main menu
-            {
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                SceneManager.LoadScene("Menu"); // Load Main menu scene
-               
-            }
+        if (Input.GetKeyDown(KeyCode.Return)) // Return to main menu
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("Menu"); // Load Main menu scene
 
-            if (Input.GetKeyDown(KeyCode.P)) // hide/show end panel
-            {
-                if (EndPanel.activeSelf == true)
-                    EndPanel.SetActive(false); // hide EndPanel
-                else
-                    EndPanel.SetActive(true); // show EndPanel
-            }
         }
-        mainDebug(); // Test debug items (remove on build)
-    }
 
-    private string StatsRep(int stat) 
+        if (Input.GetKeyDown(KeyCode.P)) // hide/show end panel
+        {
+            if (EndPanel.activeSelf == true)
+                EndPanel.SetActive(false); // hide EndPanel
+            else
+                EndPanel.SetActive(true); // show EndPanel
+        }
+    }
+    private string StatsRep(int stat) // Returns a string comment on how the stat was altered
     {
         if (stat == 0)
             return " was unaltered.";
@@ -166,67 +228,17 @@ public class GameController : MonoBehaviour
         else if (stat < 10)
             return " shrunk by " + stat + ". \nDreadful work!.";
 
-        return "Value OOD";
+        return "Stat value not recognised - ERROR";
     }
+    #endregion
 
-
-    private void stateManager()
-    {
-        if (timer < waitTime)
-            timer += Time.deltaTime; // Increase timer
-
-        if (timer >= waitTime && turnNumber < maxTurns && !inGameEvent)
-        {
-            Debug.Log("IN THAT ANNYOING LOOP");
-            if (!notificationPanel.activeSelf)
-                notificationPanel.SetActive(true);
-
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                if (turnNumber % competionFreq == 0 && turnNumber != 0) // if (competiton turn && not turn 0)
-                    isCompetition = true; // Cause a competition
-                else
-                    isProposal = true; // Cause a proposal
-
-                inGameEvent = true;
-                notificationPanel.SetActive(false);
-            }
-        }
-
-        else if (turnNumber >= maxTurns) // if (turns exceed max ammount)
-        {
-            inPlay = false;
-            EndPanel.SetActive(true); // Show EndPanel (done here to allow hiding and showing)
-        }
-    }
-
-    private void endProposal() // Called when the player interacts with a proposal
-    {
-        isProposal = false; // Exit isProposal if statment
-        proposalPanel.SetActive(false); // Hide proposalPanel
-        endTurn();
-    }
-
-    private void endCompetition() // Called when the player interacts with a proposal
-    {
-        isCompetition = false; // Exit isCompetition if statment
-        CompetitionPanel.SetActive(false); // Hide competitionPanel
-        endTurn();
-    }
-
-    private void endTurn()
-    {
-        turnNumber++; // Increse turn number
-        timer = 0; // Reset timer
-        inGameEvent = false;
-    }
-    private void mainDebug() // DEBUG / TESTING (disable on build)
+    #region Debug
+    private void MainDebug() // DEBUG - FOR TESTING PURPOSES(disable on build)
     {
         statusText.text = ("Economy: " + economy + "   Environment: " + environment +
             "   Appeal: " + appeal + "   Eco-DIversity: " + ecoDiversity);
         turnText.text = ("Turn number: " + turnNumber + " / " + maxTurns);
         timerText.text = ("Timer: " + timer + " / " + waitTime);
     }
-
-
+    #endregion
 }
