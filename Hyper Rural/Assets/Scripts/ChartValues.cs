@@ -6,39 +6,46 @@ using UnityEngine.UI;
 
 public class ChartValues : MonoBehaviour
 {
-    public static int ecoChartMax = 0; //Maximum value for each for the charts
-    public static int envirChartMax = 0;
-    public static int appChartMax = 0;
-    public static int ecoDChartMax = 0;
     public Image ecoChart;
     public Image envirChart;
     public Image appChart;
     public Image ecoDChart;
 
-    private void Start()
-    {
-        ChartManagerStart();
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        ChartManagerUpdate();
+        ecoChart.fillAmount = (float)GameController.economy / 10;
+        envirChart.fillAmount = (float)GameController.environment / 10;
+        appChart.fillAmount = (float)GameController.appeal / 10;
+        ecoDChart.fillAmount = (float)GameController.ecoDiversity / 10;
+
+        if (GameController.economy < 5)
+            ecoChart.color = new Color(255,0,0);
+        else if (GameController.economy > 10)
+            ecoChart.color = new Color(0, 255, 0);
+        else
+            ecoChart.color = new Color(0, 0, 0);
+
+        if (GameController.environment < 5)
+            envirChart.color = new Color(255, 0, 0);
+        else if (GameController.environment > 10)
+            envirChart.color = new Color(0, 255, 0);
+        else
+            envirChart.color = new Color(0, 0, 0);
+
+        if (GameController.appeal < 5)
+            appChart.color = new Color(255, 0, 0);
+        else if (GameController.appeal > 10)
+            appChart.color = new Color(0, 255, 0);
+        else
+            appChart.color = new Color(0, 0, 0);
+
+        if (GameController.ecoDiversity < 5)
+            ecoDChart.color = new Color(255, 0, 0);
+        else if (GameController.ecoDiversity > 10)
+            ecoDChart.color = new Color(0, 255, 0);
+        else
+            ecoDChart.color = new Color(0, 0, 0);
+
     }
 
-    public void ChartManagerStart()
-    {
-        ecoChart.fillAmount = ecoChartMax;
-        envirChart.fillAmount = envirChartMax;
-        appChart.fillAmount = appChartMax;
-        ecoDChart.fillAmount = ecoDChartMax;
-    }
-
-    private void ChartManagerUpdate()
-    {
-        ecoChart.fillAmount = GameController.economy / 15;
-        envirChart.fillAmount = GameController.environment / 15;
-        appChart.fillAmount = GameController.appeal / 15;
-        ecoDChart.fillAmount = GameController.ecoDiversity / 15;
-    }
 }
