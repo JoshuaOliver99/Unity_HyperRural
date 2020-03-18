@@ -12,9 +12,14 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject CompetitionPanel; // For hiding panel
     [SerializeField] GameObject notificationPanel; // For displayling the notification alert 
     [SerializeField] GameObject EndPanel; // For hiding panel
-
     [SerializeField] Text endDescText; // For displaying turns spent
     [SerializeField] Text endStatsText; // For displaying end game stats
+    [SerializeField] AudioSource showPanelAudio; // For showing both proposal types noise
+    [SerializeField] AudioSource showEndPanelAudio; // For showing the end panel noise
+    [SerializeField] AudioSource notificationAudio; // For notification noise
+    [SerializeField] AudioSource declineProposalAudio; // For declining noise
+    [SerializeField] AudioSource acceptProposalAudio; // For accepting proposals noise
+
 
     [Header("Debug references")]
     [SerializeField] Text statusText; // For displaying stats
@@ -92,10 +97,15 @@ public class GameController : MonoBehaviour
         else if (timer >= waitTime && turnNumber < maxTurns && !inGameEvent)
         {
             if (!notificationPanel.activeSelf)
+            {
+                notificationAudio.Play();
                 notificationPanel.SetActive(true);
+            }
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                showPanelAudio.Play(); // Play showing panel audio
+
                 if (turnNumber % competionFreq == 0 && turnNumber != 0) // if (competiton turn && not turn 0)
                     isCompetition = true; // Cause a competition
                 else
@@ -105,8 +115,10 @@ public class GameController : MonoBehaviour
                 notificationPanel.SetActive(false);
             }
         }
-        else if (turnNumber >= maxTurns || economy <= 0 || environment <= 0 || appeal <= 0 || ecoDiversity <= 0) // if (turns exceed max ammount) or (player looses)
+
+        if (turnNumber >= maxTurns || economy <= 0 || environment <= 0 || appeal <= 0 || ecoDiversity <= 0) // if (turns exceed max ammount) or (player looses)
         {
+            showEndPanelAudio.Play(); // Play showing end panel audio
             inPlay = false;
             EndPanel.SetActive(true); // Show EndPanel (done here to allow hiding and showing)
         }
@@ -120,12 +132,14 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Y)) // Accept / Yes
         {
+            acceptProposalAudio.Play(); // Play accept audio
             proposalsTable.AcceptProposal(); // Changes the active && Writes UI && Applies stats
             EndProposal(); // Resets for next proposal
             acceptedTotal++;
         }
         if (Input.GetKeyDown(KeyCode.N)) // Decline / No
         {
+            declineProposalAudio.Play(); // Play decline audio
             proposalsTable.DeclineProposal(); 
             EndProposal(); // Resets for next proposal
             deniedTotal++;
