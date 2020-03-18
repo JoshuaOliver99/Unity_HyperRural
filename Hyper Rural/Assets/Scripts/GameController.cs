@@ -58,7 +58,7 @@ public class GameController : MonoBehaviour
         proposalPanel.SetActive(false);
         CompetitionPanel.SetActive(false);
         EndPanel.SetActive(false);
-        notificationPanel.SetActive(false);
+        notificationPanel.SetActive(false);   
     }
 
     void Update()
@@ -73,6 +73,7 @@ public class GameController : MonoBehaviour
             {
                 if (isProposal)
                 {
+
                     ProposalManger(); // Handles Proposals
                 }
                 else if (isCompetition)
